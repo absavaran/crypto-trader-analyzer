@@ -16,62 +16,62 @@ public class TraderAnalysisService {
 
         String summary;
         String strategy;
-        String strengths;
-        String weaknesses;
+        String strengths = "";
+        String weaknesses = "";
         String recommendation;
         String riskLevel;
-        double confidence;
+        double confidence = 75.0;
 
         if (trend.contains("bull")) {
-            summary = "The market structure for " + coinName + " is bullish. The price action remains constructive and supports continuation in the current trend.";
-            strategy = "Favor trend continuation entries on pullbacks near support, with confirmation from volume and momentum. Use resistance breaks only when confirmed by stronger participation.";
-            strengths = "Strong directional bias, better risk placement, and efficient pullback entries in a healthy trend environment.";
-            weaknesses = "A late entry or weak confirmation can reduce the quality of the setup, especially if momentum fades after the initial move.";
-            recommendation = "Continue with disciplined trend-following entries while avoiding aggressive chases above clearly defined resistance.";
+            summary = "The market structure for " + coinName + " is bullish. Price action remains constructive and the broader trend supports continuation.";
+            strategy = "Maintain a trend-following bias by entering on valid pullbacks near support, only after confirming momentum and volume strength.";
+            strengths = "Strong directional flow, cleaner support levels, and better placement of entries during healthy trend pullbacks.";
+            weaknesses = "Late entries and weak confirmation may reduce expected return, especially if range expansion occurs near resistance.";
+            recommendation = "Use disciplined continuation entries while avoiding aggressive chase trades above major resistance zones.";
             riskLevel = "Moderate";
-            confidence = 86.0;
+            confidence += 10;
         } else if (trend.contains("bear")) {
-            summary = "The market structure for " + coinName + " is bearish. Momentum is under pressure, and short setups are favored only when technical confirmation stands out.";
-            strategy = "Prioritize breakdowns under structural support and avoid bottom fishing without a clear invalidation point.";
-            strengths = "Clear downside flow, good risk discipline, and strong entry opportunities during failed breakouts.";
-            weaknesses = "Countertrend rallies may reduce momentum and generate false signals if volume weakens rapidly.";
-            recommendation = "Keep exposure selective and focus on strong downside confirmation rather than emotional reversals.";
+            summary = "The market structure for " + coinName + " is bearish. Momentum remains weak and the downside bias is technically dominant.";
+            strategy = "Prioritize short setups on breakdowns under support and increase selectivity around failed bullish rebounds.";
+            strengths = "Clear downside flow, strong rejection behavior, and more reliable risk placement when structure remains intact.";
+            weaknesses = "Countertrend rallies may create false signals if the market absorbs selling pressure too quickly.";
+            recommendation = "Only engage when downside confirmation is clean and the stop is placed beyond the most recent structural pivot.";
             riskLevel = "Moderate";
-            confidence = 82.0;
+            confidence += 7;
         } else {
-            summary = "The market for " + coinName + " is range-bound. The asset is not demonstrating a strong directional bias, so execution should remain selective.";
-            strategy = "Trade only in clearly defined support and resistance zones, with strict stop placement and reduced risk sizing.";
-            strengths = "Low operational noise, better control of entry timing, and higher probability in well-defined ranges.";
-            weaknesses = "Limited trend strength can lead to repeated false breakouts and missed opportunities if timing is careless.";
-            recommendation = "Wait for a clean breakout or rejection at clear boundaries before committing capital.";
+            summary = "The market for " + coinName + " is range-bound. Price action lacks a strong directional bias and requires more selective execution.";
+            strategy = "Trade only inside well-defined support and resistance channels with tight stop management and controlled position sizing.";
+            strengths = "Higher control over entry timing, clearer invalidation points, and better discipline in sideways structure.";
+            weaknesses = "Limited trend definition creates more false breakouts and can delay the best trade opportunities.";
+            recommendation = "Wait for a decisive breakout or rejection at a major boundary before committing new risk.";
             riskLevel = "High";
-            confidence = 71.0;
+            confidence += 1;
         }
 
-        if (riskReward >= 2.5) {
-            strengths += " The risk-to-reward profile is attractive and supports sustainable capital preservation.";
-            confidence += 4;
+        if (riskReward >= 2.8) {
+            strengths += " The risk-to-reward profile is excellent and supports repeatable long-term execution.";
+            confidence += 8;
         } else if (riskReward >= 2.0) {
-            strengths += " Risk management remains acceptable, though optimization could improve long-term outcome.";
+            strengths += " Risk management remains acceptable, though optimization around target placement could further improve outcomes.";
+            confidence += 4;
         } else {
-            weaknesses += " The current risk-to-reward structure is weak and may compress the strategy's long-term profitability.";
-            confidence -= 6;
+            weaknesses += " The current risk-reward structure is weak and may reduce the strategy's effectiveness over a full trading cycle.";
+            confidence -= 8;
         }
 
         if (volumeStrength >= 70) {
-            strengths += " Volume confirms trend participation and adds weight to the decision process.";
-            confidence += 3;
+            strengths += " Current volume supports the trend and strengthens conviction in the active setup.";
+            confidence += 5;
         } else if (volumeStrength < 35) {
-            weaknesses += " Weak participation reduces conviction and increases the chance of false signals.";
-            confidence -= 5;
+            weaknesses += " Weak participation reduces conviction and increases the chance of noise-driven false entries.";
+            confidence -= 6;
         }
 
         if (sentiment != null && !sentiment.isBlank()) {
             summary += " Market sentiment is described as \"" + sentiment + "\".";
         }
 
-        if (confidence > 100) confidence = 100;
-        if (confidence < 0) confidence = 0;
+        confidence = Math.max(0, Math.min(100, confidence));
 
         return new TraderAnalysisResponse(
                 "Trader Review: " + coinName,
