@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chartTrend = document.getElementById('chartTrend');
     const historyList = document.getElementById('historyList');
     const signalFeed = document.getElementById('signalFeed');
+    const portfolioGrid = document.getElementById('portfolioGrid');
 
     const fallbackTrendMap = {
         BTC: [62000, 64000, 65500, 66700, 67342, 68250, 69000],
@@ -74,6 +75,40 @@ document.addEventListener('DOMContentLoaded', () => {
                         <strong>ETH</strong>
                         <span>Bullish · 83%</span>
                         <span>Breakout confirmation preferred</span>
+                    </div>
+                `;
+            });
+    }
+
+    function renderPortfolio() {
+        fetch('/api/portfolio')
+            .then(response => response.ok ? response.json() : Promise.reject())
+            .then(data => {
+                portfolioGrid.innerHTML = data.map(position => `
+                    <div class="portfolio-card">
+                        <div class="portfolio-top">
+                            <div class="portfolio-symbol">${position.symbol}</div>
+                            <div class="portfolio-side">${position.side}</div>
+                        </div>
+                        <div class="portfolio-meta">
+                            <span>Qty: ${position.amount}</span>
+                            <span>Entry: ${formatPrice(position.entry)}</span>
+                        </div>
+                        <div class="portfolio-meta">
+                            <span>Mark: ${formatPrice(position.mark)}</span>
+                            <span class="portfolio-pnl">P&L: ${formatPrice(position.pnl)}</span>
+                        </div>
+                        <div class="portfolio-risk risk-${position.risk.toLowerCase()}">${position.risk}</div>
+                    </div>
+                `).join('');
+            })
+            .catch(() => {
+                portfolioGrid.innerHTML = `
+                    <div class="portfolio-card">
+                        <div class="portfolio-top"><div class="portfolio-symbol">BTC</div><div class="portfolio-side">Long</div></div>
+                        <div class="portfolio-meta"><span>Qty: 0.42</span><span>Entry: $64,200.00</span></div>
+                        <div class="portfolio-meta"><span>Mark: $67,342.18</span><span class="portfolio-pnl">P&L: $1,312.52</span></div>
+                        <div class="portfolio-risk risk-low">Low</div>
                     </div>
                 `;
             });
@@ -170,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderHistory();
     renderSignals();
+    renderPortfolio();
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
