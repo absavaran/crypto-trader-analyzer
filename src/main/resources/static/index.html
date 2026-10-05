@@ -22,28 +22,7 @@
         <div class="status-pill">Live Strategy Review</div>
     </header>
 
-    <section class="hero-grid">
-        <div class="metric-card accent">
-            <span class="label">Market Condition</span>
-            <strong id="marketCondition">Bullish</strong>
-            <small>Direction quality</small>
-        </div>
-        <div class="metric-card">
-            <span class="label">Risk / Reward</span>
-            <strong id="rrValue">2.5</strong>
-            <small>Average structure score</small>
-        </div>
-        <div class="metric-card">
-            <span class="label">Volume</span>
-            <strong id="volumeValue">75%</strong>
-            <small>Participation strength</small>
-        </div>
-        <div class="metric-card">
-            <span class="label">Confidence</span>
-            <strong id="confidenceValue">85%</strong>
-            <small>Execution readiness</small>
-        </div>
-    </section>
+    <section class="hero-grid" id="marketOverview"></section>
 
     <main class="main-grid">
         <section class="panel form-panel">
@@ -102,12 +81,40 @@
 
         <section class="panel result-panel">
             <div class="panel-header">
-                <h2>Trade Review</h2>
-                <span class="panel-tag alt">AI-style</span>
+                <h2>Market Overview</h2>
+                <span class="panel-tag alt">watchlist</span>
             </div>
 
-            <div id="results" class="results-empty">
-                Submit a setup to generate a detailed trader review.
+            <div class="chart-card">
+                <div class="chart-head">
+                    <div>
+                        <div class="chart-title" id="chartTitle">BTC / USD</div>
+                        <div class="chart-subtitle" id="chartSubtitle">$67,342.18</div>
+                    </div>
+                    <div class="trend-badge" id="chartTrend">Bullish</div>
+                </div>
+                <svg id="priceChart" viewBox="0 0 600 230" preserveAspectRatio="none" aria-label="Price chart"></svg>
+            </div>
+
+            <div class="market-table-wrap">
+                <table class="market-table">
+                    <thead>
+                    <tr>
+                        <th>Pair</th>
+                        <th>Price</th>
+                        <th>24h</th>
+                        <th>Trend</th>
+                    </tr>
+                    </thead>
+                    <tbody id="marketTableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="result-panel-inner">
+                <h3>Trade Review</h3>
+                <div id="results" class="results-empty">
+                    Submit a setup to generate a detailed trader review.
+                </div>
             </div>
         </section>
     </main>
