@@ -262,6 +262,18 @@ button:hover {
     font-weight: 700;
 }
 
+.trend-badge.negative {
+    background: rgba(248, 113, 113, 0.12);
+    color: var(--red);
+    border-color: rgba(248, 113, 113, 0.38);
+}
+
+.trend-badge.neutral {
+    background: rgba(251, 191, 36, 0.12);
+    color: var(--amber);
+    border-color: rgba(251, 191, 36, 0.38);
+}
+
 #priceChart {
     width: 100%;
     height: 230px;
@@ -326,8 +338,30 @@ button:hover {
     margin: 0 0 12px 0;
 }
 
+.history-list {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.history-item {
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(9, 22, 31, 0.8);
+    border: 1px solid rgba(164, 190, 225, 0.12);
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.history-item small {
+    color: var(--muted);
+}
+
 .results-empty {
-    min-height: 200px;
+    min-height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;

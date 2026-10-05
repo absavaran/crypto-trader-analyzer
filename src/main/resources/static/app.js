@@ -7,11 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chartTitle = document.getElementById('chartTitle');
     const chartSubtitle = document.getElementById('chartSubtitle');
     const chartTrend = document.getElementById('chartTrend');
-
-    const conditionEl = document.getElementById('marketCondition');
-    const rrEl = document.getElementById('rrValue');
-    const volumeEl = document.getElementById('volumeValue');
-    const confidenceEl = document.getElementById('confidenceValue');
+    const historyList = document.getElementById('historyList');
 
     const fallbackTrendMap = {
         BTC: [62000, 64000, 65500, 66700, 67342, 68250, 69000],
@@ -30,6 +26,28 @@ document.addEventListener('DOMContentLoaded', () => {
             return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 4 }).format(value);
         }
         return '$' + value.toFixed(4);
+    }
+
+    function renderHistory() {
+        const saved = JSON.parse(localStorage.getItem('traderHistory') || '[]');
+        if (!saved.length) {
+            historyList.innerHTML = '<div class="history-item"><span>No saved analyses yet</span><small>Awaiting signal</small></div>';
+            return;
+        }
+
+        historyList.innerHTML = saved.slice(0, 4).map(item => `
+            <div class="history-item">
+                <span>${item.coin}</span>
+                <small>${item.trend} · ${item.confidence}%</small>
+            </div>
+        `).join('');
+    }
+
+    function saveHistory(item) {
+        const saved = JSON.parse(localStorage.getItem('traderHistory') || '[]');
+        const next = [item, ...saved].slice(0, 5);
+        localStorage.setItem('traderHistory', JSON.stringify(next));
+        renderHistory();
     }
 
     function fetchMarketData() {
@@ -121,6 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }));
     }
 
+    renderHistory();
+
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
@@ -133,11 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
             volumeStrength: Number(document.getElementById('volumeStrength').value),
             sentiment: document.getElementById('sentiment').value
         };
-
-        const trendValue = payload.marketTrend || 'Neutral';
-        conditionEl.textContent = trendValue;
-        rrEl.textContent = payload.riskReward || '2.0';
-        volumeEl.textContent = `${Math.max(0, Math.min(100, payload.volumeStrength || 50))}%`;
 
         resultBox.innerHTML = '<div class="results-empty">Analyzing strategy setup...</div>';
 
@@ -154,10 +169,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
             renderResult(data);
-            confidenceEl.textContent = `${data.confidence}%`;
+            saveHistory({
+                coin: payload.coinName || 'Market',
+                trend: payload.marketTrend || 'Neutral',
+                confidence: data.confidence
+            });
         } catch (error) {
             resultBox.innerHTML = '<div class="results-empty">Unable to analyze the strategy right now. Please try again.</div>';
-            confidenceEl.textContent = 'N/A';
         }
     });
 
