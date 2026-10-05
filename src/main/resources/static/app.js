@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chartSubtitle = document.getElementById('chartSubtitle');
     const chartTrend = document.getElementById('chartTrend');
     const historyList = document.getElementById('historyList');
+    const signalFeed = document.getElementById('signalFeed');
 
     const fallbackTrendMap = {
         BTC: [62000, 64000, 65500, 66700, 67342, 68250, 69000],
@@ -48,6 +49,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const next = [item, ...saved].slice(0, 5);
         localStorage.setItem('traderHistory', JSON.stringify(next));
         renderHistory();
+    }
+
+    function renderSignals() {
+        fetch('/api/signals')
+            .then(response => response.ok ? response.json() : Promise.reject())
+            .then(data => {
+                signalFeed.innerHTML = data.map(signal => `
+                    <div class="signal-row">
+                        <strong>${signal.coin}</strong>
+                        <span>${signal.trend} · ${signal.confidence}%</span>
+                        <span>${signal.recommendation}</span>
+                    </div>
+                `).join('');
+            })
+            .catch(() => {
+                signalFeed.innerHTML = `
+                    <div class="signal-row">
+                        <strong>BTC</strong>
+                        <span>Bullish · 87%</span>
+                        <span>Trend continuation near support</span>
+                    </div>
+                    <div class="signal-row">
+                        <strong>ETH</strong>
+                        <span>Bullish · 83%</span>
+                        <span>Breakout confirmation preferred</span>
+                    </div>
+                `;
+            });
     }
 
     function fetchMarketData() {
@@ -140,6 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     renderHistory();
+    renderSignals();
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();

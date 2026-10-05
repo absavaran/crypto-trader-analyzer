@@ -77,7 +77,8 @@ body {
 }
 
 .status-pill,
-.panel-tag {
+.panel-tag,
+.signal-tag {
     border: 1px solid rgba(45, 212, 191, 0.4);
     background: rgba(19, 37, 47, 0.9);
     color: #9af7e6;
@@ -322,6 +323,47 @@ button:hover {
 .market-table td {
     color: var(--text);
     font-weight: 600;
+}
+
+.signal-card {
+    background: rgba(8, 19, 28, 0.82);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.signal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.signal-feed {
+    display: grid;
+    gap: 10px;
+}
+
+.signal-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: rgba(11, 24, 35, 0.8);
+    border: 1px solid rgba(164, 190, 225, 0.1);
+    border-radius: 12px;
+    padding: 10px 12px;
+}
+
+.signal-row strong {
+    font-size: 0.95rem;
+}
+
+.signal-row span {
+    color: var(--muted);
+    font-size: 0.8rem;
 }
 
 .change-positive { color: var(--green); }
